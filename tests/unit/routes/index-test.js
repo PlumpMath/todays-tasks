@@ -1,7 +1,7 @@
 import { moduleFor, test } from 'ember-qunit';
 import Ember from 'ember';
 
-moduleFor('route:index', 'Unit - IndexRoute', {
+moduleFor('route:index', 'Route - IndexRoute', {
   subject: function(options, factory) {
     return factory.create({
       store: { }

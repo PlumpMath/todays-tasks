@@ -23,7 +23,7 @@ test('done is delegated to content', function() {
   equal(ctrl.get('done'), true);
 });
 
-test('toggleDone chahnges done', function() {
+test('task.done can be toggled', function() {
   expect(1);
   var ctrl = this.subject();
 
@@ -35,4 +35,15 @@ test('toggleDone chahnges done', function() {
   var done = ctrl.get('done');
   ctrl.send('toggleDone');
   equal(!done, ctrl.get('done'));
+});
+
+test('a task can be removed', function() {
+  expect(1);
+  var ctrl = this.subject();
+  ctrl.set('content', {
+    destroyRecord: function() {
+      ok(true);
+    }
+  });
+  ctrl.send('remove');
 });

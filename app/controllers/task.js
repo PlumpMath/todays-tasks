@@ -6,5 +6,8 @@ export default Ember.ObjectController.extend({
       this.toggleProperty('done');
       this.get('model').save();
     },
+    remove: function() {
+      this.get('model').destroyRecord();
+    },
   },
 });

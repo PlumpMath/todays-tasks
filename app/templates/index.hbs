@@ -1,4 +1,9 @@
-{{#each}}
+<label>
+  {{input type='checkbox' checked=hideDone}}
+  hide completed tasks
+</label>
+
+{{#each filteredContent itemController='task'}}
 <div>
   <span {{action 'toggleDone' on='click'}}>
   {{#if done}}
@@ -8,6 +13,7 @@
   {{/if}}
   </span>
   {{description}}
+  <span {{action 'remove' on='click'}}>delete</span>
 </div>
 {{/each}}
 <div>

@@ -16,11 +16,10 @@ test('things are ok', function() {
 });
 
 test('it queries for tasks', function() {
+  expect(1);
   var route = this.subject();
-  var model = {id: 1};
   route.store.find = function(type) {
-    return [model];
+    equal(type, 'task');
   };
-
-  equal(route.model(), [model], 'did not correctly find model');
+  route.model();
 });

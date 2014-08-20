@@ -23,8 +23,9 @@ test("Add a task", function() {
 
 test("Mark a task as done", function() {
   expect(1);
-  click('ul.tasks li.task:last .task-done');
-  equal(find('ul.tasks li.task.done:last').length, 1, 'The created task is done');
+  click('ul.tasks li.task:last .task-done').then(function() {
+    equal(find('ul.tasks li.task.done:last').length, 1, 'The created task is done');
+  });
 });
 
 test("Archive completed tasks", function() {

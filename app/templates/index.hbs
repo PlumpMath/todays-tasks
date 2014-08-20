@@ -23,7 +23,7 @@
 <ul class="tasks">
   {{#each filteredContent itemController='task'}}
   <li {{bind-attr class=":task done"}}>
-    <input type="checkbox" class="task-done" {{bind-attr checked=done}} {{action 'toggleDone' on='click'}}/>
+    {{input type='checkbox' class='task-done' checked=done}}
     {{#if isEditing}}
       <div class="task-description">
         {{task-edit value=description action='updateTask'}}

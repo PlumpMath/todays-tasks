@@ -4,7 +4,6 @@ import Ember from 'ember';
 moduleFor('controller:task', 'Controller - TaskController', {
   subject: function(options, factory) {
     return factory.create({
-      // TODO: create store object
       content: {},
     });
   },
@@ -35,15 +34,4 @@ test('task.done can be toggled', function() {
   var done = ctrl.get('done');
   ctrl.send('toggleDone');
   equal(!done, ctrl.get('done'));
-});
-
-test('a task can be removed', function() {
-  expect(1);
-  var ctrl = this.subject();
-  ctrl.set('content', {
-    destroyRecord: function() {
-      ok(true);
-    }
-  });
-  ctrl.send('remove');
 });

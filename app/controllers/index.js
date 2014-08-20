@@ -3,18 +3,18 @@ import Ember from 'ember';
 export default Ember.ArrayController.extend({
   itemController: 'task',
   errors: {},
+  /**
+   Property to keep track of recently archived tasks that can later be unarchived.
+  */
   lastArchived: [],
+  /**
+   Content with archived content excluded.
+  */
   filteredContent: function() {
     return this.get('content').filter(function(task) {
       return !task.get('archived');
     });
-  }.property(),
-  filterTasks: function() {
-    this.set('filteredContent', this.get('content').filter(function(task) {
-        return !task.get('archived');
-      })
-    );
-  }.observes('content.@each.done', 'content.@each.archived'),
+  }.property('content.@each.archived'),
   actions: {
     addTask: function() {
       var newTask = this.store.createRecord('task', {
@@ -30,7 +30,7 @@ export default Ember.ArrayController.extend({
     },
     archiveDone: function() {
       var archived = [];
-      this.get('content').forEach(function(task) {
+      this.get('filteredContent').forEach(function(task) {
         if (task.get('done')) {
           task.set('archived', true);
           archived.push(task);

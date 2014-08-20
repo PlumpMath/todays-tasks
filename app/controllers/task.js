@@ -2,14 +2,13 @@ import Ember from 'ember';
 
 export default Ember.ObjectController.extend({
   isEditing: false,
+  doneChanged: function() {
+    this.get('content').save();
+  }.observes('done'),
   actions: {
     updateTask: function() {
       this.get('content').save();
       this.set('isEditing', false);
-    },
-    toggleDone: function() {
-      this.toggleProperty('done');
-      this.get('content').save();
     },
     toggleEdit: function() {
       this.toggleProperty('isEditing');

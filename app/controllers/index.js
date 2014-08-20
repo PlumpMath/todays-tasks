@@ -2,22 +2,52 @@ import Ember from 'ember';
 
 export default Ember.ArrayController.extend({
   itemController: 'task',
-  hideDone: false,
-  filteredContent: Ember.computed.defaultTo("content"),
+  errors: {},
+  lastArchived: [],
+  filteredContent: function() {
+    return this.get('content').filter(function(task) {
+      return !task.get('archived');
+    });
+  }.property(),
   filterTasks: function() {
-    var hideDone = this.get('hideDone');
-    this.set('filteredContent', this.get('content').filter(function(model) {
-        return hideDone ? !model.get('done') : true;
+    this.set('filteredContent', this.get('content').filter(function(task) {
+        return !task.get('archived');
       })
     );
-  }.observes('hideDone', 'content.@each.done'),
+  }.observes('content.@each.done', 'content.@each.archived'),
   actions: {
     addTask: function() {
       var newTask = this.store.createRecord('task', {
         description: this.get('newDescription'),
       });
-      this.set('newDescription', '');
-      newTask.save();
+      this.setProperties({newDescription: '', errors: {}});
+      if (Ember.empty(newTask.get('description'))) {
+        newTask.rollback();
+        this.set('errors', {task: "Your new task must have a description."});
+      } else {
+        newTask.save();
+      }
+    },
+    archiveDone: function() {
+      var archived = [];
+      this.get('content').forEach(function(task) {
+        if (task.get('done')) {
+          task.set('archived', true);
+          archived.push(task);
+          task.save();
+        }
+      });
+      this.set('lastArchived', archived);
+    },
+    undoArchive: function() {
+      var tasks = this.get('lastArchived');
+      if (tasks.length) {
+        tasks.forEach(function(task) {
+          task.set('archived', false);
+          task.save();
+        });
+      }
+      this.set('lastArchived', []);
     },
   },
 

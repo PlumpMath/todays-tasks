@@ -1,24 +1,40 @@
-<label>
-  {{input type='checkbox' checked=hideDone}}
-  hide completed tasks
-</label>
+<h2>Today's Tasks</h2>
 
-{{#each filteredContent itemController='task'}}
-<div>
-  <span {{action 'toggleDone' on='click'}}>
-  {{#if done}}
-    [x]
-  {{else}}
-    [ ]
-  {{/if}}
-  </span>
-  {{description}}
-  <span {{action 'remove' on='click'}}>delete</span>
-</div>
-{{/each}}
-<div>
-  <form {{action 'addTask' on='submit'}}>
+<div class="tasks-actions">
+  <form class="new-task" {{action 'addTask' on='submit'}}>
+    {{#if errors.task}}
+    <small>{{errors.task}}</small>
+    {{/if}}
     {{input value=newDescription placeholder='enter a new task'}}
-    <button type="submit">save</button>
+    <button class="btn" type="submit">save</button>
   </form>
 </div>
+
+<p>Double click a task to edit the description.</p>
+
+{{#if lastArchived}}
+<div class="notice">
+  <span class="btn" {{action 'undoArchive' on='click'}}>
+    restore the last {{lastArchived.length}} task(s)
+  </span>
+</div>
+{{/if}}
+
+<ul class="tasks">
+  {{#each filteredContent itemController='task'}}
+  <li {{bind-attr class=":task done"}}>
+    <input type="checkbox" class="task-done" {{bind-attr checked=done}} {{action 'toggleDone' on='click'}}/>
+    {{#if isEditing}}
+      <div class="task-description">
+        {{task-edit value=description action='updateTask'}}
+      </div>
+    {{else}}
+      <div class="task-description" {{action 'toggleEdit' on='doubleClick'}}>
+        {{description}}
+      </div>
+    {{/if}}
+  </li>
+  {{/each}}
+</ul>
+
+<button class="btn" {{action 'archiveDone' on='click'}}>archive done tasks</button>
